@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"math"
 	"strconv"
 
@@ -68,5 +69,7 @@ func main() {
 	)
 
 	bot := irwys.New(*token, &opts)
-	bot.Start()
+	if err := bot.Start(); err != nil {
+		log.Fatal(err)
+	}
 }

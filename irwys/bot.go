@@ -303,7 +303,7 @@ func (b bot) initBot(dbMessages DB, dbChats DB, botAPI *tgbotapi.BotAPI) {
 	}
 }
 
-func (b bot) Start() {
+func (b bot) Start() error {
 	if b.opts.verbose {
 		Init(os.Stdout, os.Stdout, os.Stdout, os.Stderr)
 	} else {
@@ -321,8 +321,7 @@ func (b bot) Start() {
 
 	botAPI, err := tgbotapi.NewBotAPI(b.token)
 	if err != nil {
-		Error.Println("Can't authenticate with given token")
-		panic(err)
+		return fmt.Errorf("can't authenticate with given token: %w", err)
 	}
 
 	Info.Printf("Authorized on account %s", botAPI.Self.UserName)
@@ -333,6 +332,9 @@ func (b bot) Start() {
 	u.Timeout = 60
 
 	updates, err := botAPI.GetUpdatesChan(u)
+	if err != nil {
+		return fmt.Errorf("getting update channel: %w", err)
+	}
 
 	for update := range updates {
 		if update.Message == nil {
@@ -365,4 +367,5 @@ func (b bot) Start() {
 			chats.Get(chatIDStr).(chan tgbotapi.Update) <- update
 		}
 	}
+	return nil
 }
