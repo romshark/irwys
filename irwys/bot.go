@@ -10,7 +10,6 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
-	"sync"
 	"time"
 
 	tgbotapi "github.com/Syfaro/telegram-bot-api"
@@ -25,9 +24,10 @@ var (
 	Error   *log.Logger
 )
 
-var chats = NewSynMap()
-var replies = NewSynMap()
-var lock = sync.RWMutex{}
+var (
+	chats   = NewSynMap()
+	replies = NewSynMap()
+)
 
 func Init(
 	verboseHandle io.Writer,
@@ -133,7 +133,7 @@ func (b bot) recall(dbMessages DB, dbChats DB, update tgbotapi.Update, botAPI *t
 		return
 	}
 
-	var lang = "en"
+	lang := "en"
 
 	rand.Seed(time.Now().UTC().UnixNano())
 	chatIDStr := strconv.FormatInt(update.Message.Chat.ID, 10)
@@ -207,13 +207,13 @@ func (b bot) watcher(dbMessages DB, dbChats DB, ch chan tgbotapi.Update, botAPI 
 
 	var lastUpdateDate time.Time
 	var update tgbotapi.Update
-	var ok = true
+	var ok bool
 	rand.Seed(time.Now().UTC().UnixNano())
 
 	for {
 		select {
 		case update, ok = <-ch:
-			if ok == false {
+			if !ok {
 				break
 			}
 			b.remember(dbMessages, update)
