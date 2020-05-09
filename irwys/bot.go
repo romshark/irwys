@@ -224,7 +224,7 @@ func (b bot) watcher(dbMessages DB, dbChats DB, ch chan tgbotapi.Update, botAPI 
 				update.Message == nil {
 				continue
 			}
-			acceptableWindow := now.Add(time.Duration(-b.opts.timeout) * time.Minute)
+			acceptableWindow := now.Add(-b.opts.timeout)
 			if !lastUpdateDate.After(acceptableWindow) {
 				if rand.Float64() < 0.3 {
 					b.recall(dbMessages, dbChats, update, botAPI)

@@ -20,9 +20,9 @@ var (
 	).Default(strconv.FormatUint(math.MaxUint16, 10)).Uint16()
 	timeout = kingpin.Flag(
 		"timeout",
-		`How long to wait after last message was posted (in minutes).
+		`How long to wait after last message was posted.
 		There is 30% chance of reply.`,
-	).Default("30").Short('t').Int16()
+	).Default("30m").Short('t').Duration()
 	timeStart = kingpin.Flag(
 		"timeStart",
 		"When bot starts to recall.",

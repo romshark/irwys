@@ -1,10 +1,12 @@
 package irwys
 
+import "time"
+
 // Options structure.
 type Options struct {
 	minWords  uint16
 	maxWords  uint16
-	timeout   int16
+	timeout   time.Duration
 	timeStart uint8
 	timeEnd   uint8
 	capacity  uint16
@@ -17,7 +19,7 @@ type Options struct {
 func NewOptions(
 	minWords uint16,
 	maxWords uint16,
-	timeout int16,
+	timeout time.Duration,
 	timeStart uint8,
 	timeEnd uint8,
 	capacity uint16,
@@ -26,8 +28,15 @@ func NewOptions(
 	verbose bool,
 ) Options {
 	o := Options{
-		minWords, maxWords, timeout, timeStart, timeEnd,
-		capacity, dbPath, replyPath, verbose,
+		minWords,
+		maxWords,
+		timeout,
+		timeStart,
+		timeEnd,
+		capacity,
+		dbPath,
+		replyPath,
+		verbose,
 	}
 	return o
 }
